@@ -77,14 +77,50 @@ def get_stream_url_with_retry(api_url, channel_name, retries=3):
             
             # Пробуем разные пути к потоку
             hls_streams = data.get('live_streams', {}).get('hls', [])
+            
+            # Собираем ВСЕ доступные потоки
+            all_streams = []
             if hls_streams:
                 for stream in hls_streams:
                     stream_url = stream.get('url')
                     if stream_url and 'm3u8' in stream_url:
-                        print(f"  ✓ Найден поток для {channel_name}")
-                        return stream_url
+                        stream_type = "audio" if stream.get('is_audio') else "video"
+                        is_dvr = stream.get('is_dvr', False)
+                        all_streams.append({
+                            'url': stream_url,
+                            'type': stream_type,
+                            'is_dvr': is_dvr,
+                            'quality': 'high' if 'hd' in stream_url.lower() else 'standard'
+                        })
             
-            # Альтернативный путь
+            if all_streams:
+                # Приоритет: видео потоки > аудио потоки, DVR > без DVR
+                video_streams = [s for s in all_streams if s['type'] == 'video']
+                audio_streams = [s for s in all_streams if s['type'] == 'audio']
+                
+                # Сначала пробуем видео потоки с DVR
+                for stream in video_streams:
+                    if stream['is_dvr']:
+                        print(f"  ✓ Найден видео поток с DVR для {channel_name}")
+                        return stream['url']
+                
+                # Затем любые видео потоки
+                if video_streams:
+                    print(f"  ✓ Найден видео поток для {channel_name}")
+                    return video_streams[0]['url']
+                
+                # Затем аудио потоки с DVR
+                for stream in audio_streams:
+                    if stream['is_dvr']:
+                        print(f"  ✓ Найден аудио поток с DVR для {channel_name}")
+                        return stream['url']
+                
+                # И наконец любые аудио потоки
+                if audio_streams:
+                    print(f"  ✓ Найден аудио поток для {channel_name}")
+                    return audio_streams[0]['url']
+            
+            # Альтернативный путь - проверяем video_meta
             video_meta = data.get('video_meta', {})
             if video_meta:
                 stream_url = video_meta.get('url')
@@ -93,6 +129,7 @@ def get_stream_url_with_retry(api_url, channel_name, retries=3):
                     return stream_url
             
             print(f"  ✗ Поток не найден в ответе для {channel_name}")
+            print(f"  Доступные потоки: {all_streams}")
             return None
             
         except requests.exceptions.Timeout:
@@ -120,8 +157,8 @@ def create_playlist():
         successful_channels = 0
         failed_channels = []
 
-        # Обработка каждого URL API
-        for api_url, channel_name in api_data:
+        # Обработка каждого URL API с задержкой
+        for i, (api_url, channel_name) in enumerate(api_data):
             stream_url = get_stream_url_with_retry(api_url, channel_name)
             
             if stream_url:
@@ -130,6 +167,10 @@ def create_playlist():
                 successful_channels += 1
             else:
                 failed_channels.append(channel_name)
+            
+            # Добавляем задержку между запросами (кроме последнего)
+            if i < len(api_data) - 1:
+                time.sleep(1)  # 1 секунда между запросами
 
         # Добавляем информацию о статусе
         playlist_content.append(f"# Total channels: {len(api_data)}")
