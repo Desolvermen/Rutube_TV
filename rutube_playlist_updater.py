@@ -162,7 +162,7 @@ def update_playlist_on_github():
         return False
     
     # Настройки репозитория
-    repo_owner = "Rutube-TV"  # Замените на ваш username
+    repo_owner = "Desolvermen"  # Замените на ваш username
     repo_name = "Rutube_TV"   # Замените на название репозитория
     
     # Создаем плейлист
