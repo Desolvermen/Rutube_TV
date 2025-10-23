@@ -50,140 +50,181 @@ api_data = [
     ("https://rutube.ru/api/play/options/99d4597cea881a27cf7dd6e65a74dade/", "Плюс Минус 16 HD")
 ]
 
-def get_stream_url_with_retry(api_url, channel_name, retries=3):
-    """Получает URL потока с повторными попытками"""
-    for attempt in range(retries):
-        try:
-            print(f"Попытка {attempt + 1} для {channel_name}")
-            
-            # Добавляем заголовки чтобы избежать блокировки
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                'Accept': 'application/json',
-                'Referer': 'https://rutube.ru/'
-            }
-            
-            response = requests.get(api_url, timeout=15, headers=headers)
-            
-            if response.status_code == 403:
-                print(f"  Доступ запрещен для {channel_name}")
-                return None
-            elif response.status_code == 404:
-                print(f"  Канал не найден: {channel_name}")
-                return None
-                
-            response.raise_for_status()
-            data = response.json()
-            
-            # Пробуем разные пути к потоку
-            hls_streams = data.get('live_streams', {}).get('hls', [])
-            
-            # Собираем ВСЕ доступные потоки
-            all_streams = []
-            if hls_streams:
-                for stream in hls_streams:
-                    stream_url = stream.get('url')
-                    if stream_url and 'm3u8' in stream_url:
-                        stream_type = "audio" if stream.get('is_audio') else "video"
-                        is_dvr = stream.get('is_dvr', False)
-                        all_streams.append({
-                            'url': stream_url,
-                            'type': stream_type,
-                            'is_dvr': is_dvr,
-                            'quality': 'high' if 'hd' in stream_url.lower() else 'standard'
-                        })
-            
-            if all_streams:
-                # Приоритет: видео потоки > аудио потоки, DVR > без DVR
-                video_streams = [s for s in all_streams if s['type'] == 'video']
-                audio_streams = [s for s in all_streams if s['type'] == 'audio']
-                
-                # Сначала пробуем видео потоки с DVR
-                for stream in video_streams:
-                    if stream['is_dvr']:
-                        print(f"  ✓ Найден видео поток с DVR для {channel_name}")
-                        return stream['url']
-                
-                # Затем любые видео потоки
-                if video_streams:
-                    print(f"  ✓ Найден видео поток для {channel_name}")
-                    return video_streams[0]['url']
-                
-                # Затем аудио потоки с DVR
-                for stream in audio_streams:
-                    if stream['is_dvr']:
-                        print(f"  ✓ Найден аудио поток с DVR для {channel_name}")
-                        return stream['url']
-                
-                # И наконец любые аудио потоки
-                if audio_streams:
-                    print(f"  ✓ Найден аудио поток для {channel_name}")
-                    return audio_streams[0]['url']
-            
-            # Альтернативный путь - проверяем video_meta
-            video_meta = data.get('video_meta', {})
-            if video_meta:
-                stream_url = video_meta.get('url')
-                if stream_url and 'm3u8' in stream_url:
-                    print(f"  ✓ Найден поток через video_meta для {channel_name}")
-                    return stream_url
-            
-            print(f"  ✗ Поток не найден в ответе для {channel_name}")
-            print(f"  Доступные потоки: {all_streams}")
+def get_stream_url_advanced(api_url, channel_name):
+    """Продвинутый метод получения URL потока"""
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
+        'Origin': 'https://rutube.ru',
+        'Referer': 'https://rutube.ru/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin'
+    }
+    
+    try:
+        print(f"🔍 Получение потока для: {channel_name}")
+        
+        # Метод 1: Прямой запрос к API
+        response = requests.get(api_url, headers=headers, timeout=10)
+        
+        if response.status_code != 200:
+            print(f"  ❌ HTTP {response.status_code} для {channel_name}")
             return None
             
-        except requests.exceptions.Timeout:
-            print(f"  ⏰ Таймаут для {channel_name} (попытка {attempt + 1})")
-            if attempt < retries - 1:
-                time.sleep(2)  # Ждем перед повторной попыткой
-        except requests.exceptions.RequestException as e:
-            print(f"  ❌ Ошибка запроса для {channel_name}: {e}")
-            if attempt < retries - 1:
-                time.sleep(2)
-        except Exception as e:
-            print(f"  ❌ Неожиданная ошибка для {channel_name}: {e}")
-            if attempt < retries - 1:
-                time.sleep(2)
-    
-    return None
+        data = response.json()
+        
+        # Поиск в разных структурах ответа
+        stream_url = None
+        
+        # Метод 2: Поиск в live_streams -> hls
+        if not stream_url:
+            hls_streams = data.get('live_streams', {}).get('hls', [])
+            for stream in hls_streams:
+                url = stream.get('url')
+                if url and 'm3u8' in url:
+                    stream_url = url
+                    print(f"  ✅ Найден через live_streams.hls")
+                    break
+        
+        # Метод 3: Поиск в video_meta
+        if not stream_url:
+            video_meta = data.get('video_meta', {})
+            url = video_meta.get('url')
+            if url and 'm3u8' in url:
+                stream_url = url
+                print(f"  ✅ Найден через video_meta")
+        
+        # Метод 4: Поиск в других возможных полях
+        if not stream_url:
+            # Пробуем разные пути в JSON
+            possible_paths = [
+                ['video', 'url'],
+                ['streams', 0, 'url'],
+                ['hls_url'],
+                ['m3u8_url'],
+                ['playlist', 'url']
+            ]
+            
+            for path in possible_paths:
+                try:
+                    current = data
+                    for key in path:
+                        if isinstance(key, int) and isinstance(current, list) and len(current) > key:
+                            current = current[key]
+                        elif isinstance(current, dict) and key in current:
+                            current = current[key]
+                        else:
+                            break
+                    else:
+                        if current and 'm3u8' in str(current):
+                            stream_url = current
+                            print(f"  ✅ Найден через путь {path}")
+                            break
+                except:
+                    continue
+        
+        # Метод 5: Если есть ID, пробуем альтернативный API
+        if not stream_url and '/' in api_url:
+            try:
+                video_id = api_url.split('/')[-2] if api_url.endswith('/') else api_url.split('/')[-1]
+                alt_url = f"https://rutube.ru/api/playlist/options/{video_id}/"
+                alt_response = requests.get(alt_url, headers=headers, timeout=5)
+                if alt_response.status_code == 200:
+                    alt_data = alt_response.json()
+                    # Поиск в альтернативном ответе
+                    for item in alt_data.get('results', []):
+                        for stream in item.get('live_streams', {}).get('hls', []):
+                            url = stream.get('url')
+                            if url and 'm3u8' in url:
+                                stream_url = url
+                                print(f"  ✅ Найден через альтернативный API")
+                                break
+                        if stream_url:
+                            break
+            except:
+                pass
+        
+        if stream_url:
+            # Очистка URL от лишних параметров если нужно
+            if '?' in stream_url:
+                base_url = stream_url.split('?')[0]
+                if base_url.endswith('.m3u8'):
+                    stream_url = base_url
+            
+            print(f"  📺 URL: {stream_url[:80]}..." if len(stream_url) > 80 else f"  📺 URL: {stream_url}")
+            return stream_url
+        else:
+            print(f"  ❌ Поток не найден в ответе API")
+            # Выводим отладочную информацию
+            print(f"  🔍 Ключи в ответе: {list(data.keys()) if isinstance(data, dict) else 'Не dict'}")
+            return None
+            
+    except requests.exceptions.Timeout:
+        print(f"  ⏰ Таймаут при запросе")
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"  ❌ Ошибка сети: {e}")
+        return None
+    except Exception as e:
+        print(f"  💥 Неожиданная ошибка: {e}")
+        return None
 
 def create_playlist():
     """Создает плейлист и возвращает его содержимое"""
     try:
         playlist_content = ["#EXTM3U"]
-        playlist_content.append(f"# Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        playlist_content.append("# Playlist automatically generated from Rutube")
+        playlist_content.append(f"#EXTM3U url-tvg=\"https://i.mjh.nz/ru/tvg.xml\"")
+        playlist_content.append(f"#PLAYLIST: Rutube TV Channels")
+        playlist_content.append(f"#Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        playlist_content.append("")
         
         successful_channels = 0
         failed_channels = []
 
+        print("🎬 Начинаем сбор плейлиста...")
+        print("=" * 50)
+
         # Обработка каждого URL API с задержкой
         for i, (api_url, channel_name) in enumerate(api_data):
-            stream_url = get_stream_url_with_retry(api_url, channel_name)
+            print(f"\n📡 Канал {i+1}/{len(api_data)}: {channel_name}")
+            
+            stream_url = get_stream_url_advanced(api_url, channel_name)
             
             if stream_url:
-                playlist_content.append(f"#EXTINF:-1 tvg-id=\"{channel_name}\",{channel_name}")
-                playlist_content.append(f"{stream_url}")
+                # Добавляем канал в плейлист
+                playlist_content.append(f"#EXTINF:-1 tvg-id=\"{channel_name}\" tvg-name=\"{channel_name}\" group-title=\"Rutube\",{channel_name}")
+                playlist_content.append(stream_url)
                 successful_channels += 1
+                print(f"  ✅ Добавлен в плейлист")
             else:
                 failed_channels.append(channel_name)
+                print(f"  ❌ Не добавлен")
             
-            # Добавляем задержку между запросами (кроме последнего)
+            # Задержка между запросами
             if i < len(api_data) - 1:
-                time.sleep(1)  # 1 секунда между запросами
+                time.sleep(0.5)
 
-        # Добавляем информацию о статусе
-        playlist_content.append(f"# Total channels: {len(api_data)}")
-        playlist_content.append(f"# Successful: {successful_channels}")
-        playlist_content.append(f"# Failed: {len(failed_channels)}")
+        print("\n" + "=" * 50)
+        print(f"📊 ИТОГ: Успешно {successful_channels}/{len(api_data)}")
+        
+        # Добавляем информацию о статусе в конец плейлиста
+        playlist_content.append("")
+        playlist_content.append("# Статистика:")
+        playlist_content.append(f"# Всего каналов: {len(api_data)}")
+        playlist_content.append(f"# Успешно: {successful_channels}")
+        playlist_content.append(f"# Не найдено: {len(failed_channels)}")
         
         if failed_channels:
-            playlist_content.append("# Failed channels: " + ", ".join(failed_channels))
+            playlist_content.append("# Не удалось получить:")
+            for failed in failed_channels:
+                playlist_content.append(f"# - {failed}")
         
         return "\n".join(playlist_content), successful_channels, len(failed_channels)
         
     except Exception as e:
-        print(f"Произошла ошибка при создании плейлиста: {e}")
+        print(f"💥 Критическая ошибка при создании плейлиста: {e}")
         return None, 0, len(api_data)
 
 class GitHubUploader:
@@ -231,14 +272,14 @@ class GitHubUploader:
             response = requests.put(url, headers=self.get_headers(), json=data)
             
             if response.status_code in [200, 201]:
-                print(f"Файл {file_path} успешно загружен в GitHub")
+                print(f"✅ Файл {file_path} успешно загружен в GitHub")
                 return True
             else:
-                print(f"Ошибка загрузки: {response.status_code} - {response.text}")
+                print(f"❌ Ошибка загрузки: {response.status_code}")
                 return False
                 
         except Exception as e:
-            print(f"Ошибка при загрузке в GitHub: {e}")
+            print(f"❌ Ошибка при загрузке в GitHub: {e}")
             return False
 
 def update_playlist_on_github():
@@ -247,7 +288,7 @@ def update_playlist_on_github():
     # Получаем токен из переменных окружения
     github_token = os.getenv('GITHUB_TOKEN')
     if not github_token:
-        print("Ошибка: GITHUB_TOKEN не установлен")
+        print("❌ Ошибка: GITHUB_TOKEN не установлен")
         return False
     
     # Настройки репозитория
@@ -255,16 +296,27 @@ def update_playlist_on_github():
     repo_name = "Rutube_TV"   # Замените на название репозитория
     
     # Создаем плейлист
+    print("🔄 Создание плейлиста...")
     playlist_content, success_count, fail_count = create_playlist()
+    
     if not playlist_content:
+        print("❌ Не удалось создать плейлист")
         return False
     
     # Загружаем в GitHub
+    print("🔄 Загрузка в GitHub...")
     uploader = GitHubUploader(github_token, repo_owner, repo_name)
     
-    commit_message = f"Auto-update playlist: {success_count} channels, {fail_count} failed"
+    commit_message = f"Auto-update: {success_count} channels, {fail_count} failed - {datetime.now().strftime('%Y-%m-%d %H:%M')}"
     
-    return uploader.upload_file("Rutube_TV.m3u8", playlist_content, commit_message)
+    success = uploader.upload_file("Rutube_TV.m3u8", playlist_content, commit_message)
+    
+    if success:
+        print(f"🎉 Плейлист успешно обновлен! {success_count} каналов")
+    else:
+        print("💥 Ошибка при загрузке плейлиста")
+        
+    return success
 
 def create_local_playlist():
     """Создает плейлист локально (для тестирования)"""
@@ -274,19 +326,28 @@ def create_local_playlist():
         try:
             with open('Rutube_TV.m3u8', 'w', encoding='utf-8') as f:
                 f.write(playlist_content)
-            print(f"Локальный плейлист создан: {success_count} успешно, {fail_count} с ошибками")
+            print(f"✅ Локальный плейлист создан: {success_count} успешно, {fail_count} с ошибками")
+            print("📁 Файл: Rutube_TV.m3u8")
             return True
         except Exception as e:
-            print(f"Ошибка при сохранении файла: {e}")
+            print(f"❌ Ошибка при сохранении файла: {e}")
             return False
     return False
 
 if __name__ == "__main__":
+    print("🚀 Запуск Rutube Playlist Updater")
+    print("=" * 40)
+    
     # Если запускается в GitHub Actions, используем GitHub загрузку
     if os.getenv('GITHUB_ACTIONS') == 'true':
+        print("🌐 Режим: GitHub Actions")
         success = update_playlist_on_github()
         exit(0 if success else 1)
     else:
         # Локальный запуск
+        print("💻 Режим: Локальный")
         success = create_local_playlist()
-        print("Плейлист создан локально: Rutube_TV.m3u8")
+        if success:
+            print("✅ Скрипт завершен успешно")
+        else:
+            print("❌ Скрипт завершен с ошибками")
