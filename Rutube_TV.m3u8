@@ -1,57 +1,78 @@
 #EXTM3U
-# Updated: 2025-10-23 18:48:27
-# Playlist automatically generated from Rutube
-#EXTINF:-1 tvg-id="Первый канал HD",Первый канал HD
-https://bl.rutube.ru/livestream/c58f502c7bb34a8fcdd976b221fca292/index.m3u8?s=9H0ySa1V9YJzgCXF5I9Oiw&e=1761331708&scheme=https
-#EXTINF:-1 tvg-id="НТВ HD",НТВ HD
-https://bl.rutube.ru/livestream/c37cd74192c6bc3d6cd6077c0c4fd686/index.m3u8?s=3P0Fe1xhYW4bg6VRDI0Uyg&e=1761331710&scheme=https
-#EXTINF:-1 tvg-id="Суббота! HD",Суббота! HD
-https://bl.rutube.ru/livestream/310744c10a5809da38aa445c952976da/index.m3u8?s=3fpiukKIWc37VOQys3JF_w&e=1761331721&scheme=https
-#EXTINF:-1 tvg-id="Rutube TV HD",Rutube TV HD
-https://bl.rutube.ru/livestream/9ae8e8a6dc58bdad66190475f9872ecd/index.m3u8?s=cNGwWe4mGRABwUX6z4QuiA&e=1761331723&scheme=https
-#EXTINF:-1 tvg-id="Соловьёв Live HD",Соловьёв Live HD
-https://bl.rutube.ru/livestream/c9b87c0b00cfff9b37f95b9c8e4eed42/index.m3u8?s=TvPn4vpX-xtDp08zd7tftA&e=1761331725&scheme=https
-#EXTINF:-1 tvg-id="ОТР HD",ОТР HD
-https://bl.rutube.ru/livestream/faa934385b83f9e8a92f5484defae5fa/index.m3u8?s=zAZOstZLiwSa2o5Ne5akYA&e=1761331732&scheme=https
-#EXTINF:-1 tvg-id="Звезда HD",Звезда HD
-https://bl.rutube.ru/livestream/5ab908fccfac5bb43ef2b1e4182256b0/index.m3u8?s=UpuEku4GdX7X8ctxndinNw&e=1761331734&scheme=https
-#EXTINF:-1 tvg-id="РБК HD",РБК HD
-https://bl.rutube.ru/livestream/88f6485ee28d56daf13302ac6fe3d931/index.m3u8?s=8qM5PprkyAg6I7XhBJ2_ZA&e=1761331739&scheme=https
-#EXTINF:-1 tvg-id="ОСН HD",ОСН HD
-https://bl.rutube.ru/livestream/1f550a23c44ec7f287324b0b3e4f5a29/index.m3u8?s=6NgTwfl0wDUF4QoH_8tI-g&e=1761331741&scheme=https
-#EXTINF:-1 tvg-id="Телеканал 360° HD",Телеканал 360° HD
-https://bl.rutube.ru/livestream/07beff61e617797db550cc3a5f6ad92b/index.m3u8?s=dhkHSheVlaDuldvK1J0NpA&e=1761331742&scheme=https
-#EXTINF:-1 tvg-id="360° Новости HD",360° Новости HD
-https://bl.rutube.ru/livestream/d14fcf59cb7d07a26c48ebc8c6565f44/index.m3u8?s=TyXqzeUGC-uRqCQlN6I5Uw&e=1761331744&scheme=https
-#EXTINF:-1 tvg-id="Вместе-РФ HD",Вместе-РФ HD
-https://bl.rutube.ru/livestream/f6a6d5c955180d0d0f80c66d0b6150d3/index.m3u8?s=4Hr50BUZZC_XPMcLDNoQhw&e=1761331746&scheme=https
-#EXTINF:-1 tvg-id="Царьград HD",Царьград HD
-https://bl.rutube.ru/livestream/91815da4edb167b5bd617bae490e57da/index.m3u8?s=9rorECb4mHhT2L2W5a6NHg&e=1761331747&scheme=https
-#EXTINF:-1 tvg-id="Союз HD",Союз HD
-https://bl.rutube.ru/livestream/80b308e455f2aceb498e5dccd58ca050/index.m3u8?s=b9fb1pGUnl346uGyonrsDQ&e=1761331749&scheme=https
-#EXTINF:-1 tvg-id="Смайл ТВ HD",Смайл ТВ HD
-https://bl.rutube.ru/livestream/2f052691c75d72b3ed7f3c33ea956a41/index.m3u8?s=3IA1WjHOwzxz6nqTyte7Pg&e=1761331753&scheme=https
-#EXTINF:-1 tvg-id="Охотник и рыболов Int HD",Охотник и рыболов Int HD
-https://bl.rutube.ru/livestream/1da5d92af8c55b16241f1eb12a27f00c/index.m3u8?s=ipDDXUDGgW5tyYspL5vuLg&e=1761331758&scheme=https
-#EXTINF:-1 tvg-id="Загородный Int HD",Загородный Int HD
-https://bl.rutube.ru/livestream/406973c72e9d0449feef05ef7811ad01/index.m3u8?s=TnGqP6TvjN-flR_PyKNLng&e=1761331760&scheme=https
-#EXTINF:-1 tvg-id="ТНТ Music HD",ТНТ Music HD
-https://bl.rutube.ru/livestream/5a294ae1ed12c44c7053301fb5fa9ba0/index.m3u8?s=tWTXnRkzERsWyi-tdrH2ng&e=1761331762&scheme=https
-#EXTINF:-1 tvg-id="RU.TV HD",RU.TV HD
-https://bl.rutube.ru/livestream/b1eb8e90d7e636677b3eb73b4fcbb717/index.m3u8?s=OOFzJOBkRVLeXten5obstw&e=1761331764&scheme=https
-#EXTINF:-1 tvg-id="VIVA Russia HD",VIVA Russia HD
-https://bl.rutube.ru/livestream/f712ae5ff3db23ec09b3674133d44daa/index.m3u8?s=jh5hGyrKTLZiR5X6NnLc0A&e=1761331766&scheme=https
-#EXTINF:-1 tvg-id="Музыка Мода ТВ HD",Музыка Мода ТВ HD
-https://bl.rutube.ru/livestream/965a025e4ebbaf0957415f80c6de8534/index.m3u8?s=XGQD8SsWWUJrzy8D62qAHQ&e=1761331768&scheme=https
-#EXTINF:-1 tvg-id="Кино и Жизнь HD",Кино и Жизнь HD
-https://bl.rutube.ru/livestream/09e51eefa939595a4ac67182c6fb3e4e/index.m3u8?s=vvbNBNw62xxMo429KhHTKg&e=1761331776&scheme=https
-#EXTINF:-1 tvg-id="Кинолаффка HD",Кинолаффка HD
-https://bl.rutube.ru/livestream/3b7d1499da9396462bfd17282d758d30/index.m3u8?s=b-3mvsHiD9DJ_jikiQ9Elw&e=1761331778&scheme=https
-#EXTINF:-1 tvg-id="Киножелезо HD",Киножелезо HD
-https://bl.rutube.ru/livestream/4965b7b928c4a143d708ab424be01d37/index.m3u8?s=_VcZloPsFKCWZDUAWpyWfg&e=1761331780&scheme=https
-#EXTINF:-1 tvg-id="Плюс Минус 16 HD",Плюс Минус 16 HD
-https://bl.rutube.ru/livestream/99d4597cea881a27cf7dd6e65a74dade/index.m3u8?s=5XhrbpkLqckYUEdxjdSeNg&e=1761331783&scheme=https
-# Total channels: 42
-# Successful: 25
-# Failed: 17
-# Failed channels: ТНТ HD, ТНТ-4 HD, ТВ-3 HD, Пятница! HD, Матч! ТВ HD, Муз-ТВ HD, Ю-ТВ HD, Мир HD, Мир 24 HD, 2х2 HD, Moonbug Kids TV HD (eng), Mr.Bean Cartoon HD (eng), Kronehit TV HD, World Fashion Channel HD, Deluxe Dance HD, NOW:Rock HD, Comedy Hub HD
+#EXTM3U url-tvg="https://i.mjh.nz/ru/tvg.xml"
+#PLAYLIST: Rutube TV Channels
+#Updated: 2025-10-23 18:57:00
+
+#EXTINF:-1 tvg-id="Первый канал HD" tvg-name="Первый канал HD" group-title="Rutube",Первый канал HD
+https://bl.rutube.ru/livestream/c58f502c7bb34a8fcdd976b221fca292/index.m3u8
+#EXTINF:-1 tvg-id="НТВ HD" tvg-name="НТВ HD" group-title="Rutube",НТВ HD
+https://bl.rutube.ru/livestream/c37cd74192c6bc3d6cd6077c0c4fd686/index.m3u8
+#EXTINF:-1 tvg-id="Суббота! HD" tvg-name="Суббота! HD" group-title="Rutube",Суббота! HD
+https://bl.rutube.ru/livestream/310744c10a5809da38aa445c952976da/index.m3u8
+#EXTINF:-1 tvg-id="Rutube TV HD" tvg-name="Rutube TV HD" group-title="Rutube",Rutube TV HD
+https://bl.rutube.ru/livestream/9ae8e8a6dc58bdad66190475f9872ecd/index.m3u8
+#EXTINF:-1 tvg-id="Соловьёв Live HD" tvg-name="Соловьёв Live HD" group-title="Rutube",Соловьёв Live HD
+https://bl.rutube.ru/livestream/c9b87c0b00cfff9b37f95b9c8e4eed42/index.m3u8
+#EXTINF:-1 tvg-id="ОТР HD" tvg-name="ОТР HD" group-title="Rutube",ОТР HD
+https://bl.rutube.ru/livestream/faa934385b83f9e8a92f5484defae5fa/index.m3u8
+#EXTINF:-1 tvg-id="Звезда HD" tvg-name="Звезда HD" group-title="Rutube",Звезда HD
+https://bl.rutube.ru/livestream/5ab908fccfac5bb43ef2b1e4182256b0/index.m3u8
+#EXTINF:-1 tvg-id="РБК HD" tvg-name="РБК HD" group-title="Rutube",РБК HD
+https://bl.rutube.ru/livestream/88f6485ee28d56daf13302ac6fe3d931/index.m3u8
+#EXTINF:-1 tvg-id="ОСН HD" tvg-name="ОСН HD" group-title="Rutube",ОСН HD
+https://bl.rutube.ru/livestream/1f550a23c44ec7f287324b0b3e4f5a29/index.m3u8
+#EXTINF:-1 tvg-id="Телеканал 360° HD" tvg-name="Телеканал 360° HD" group-title="Rutube",Телеканал 360° HD
+https://bl.rutube.ru/livestream/07beff61e617797db550cc3a5f6ad92b/index.m3u8
+#EXTINF:-1 tvg-id="360° Новости HD" tvg-name="360° Новости HD" group-title="Rutube",360° Новости HD
+https://bl.rutube.ru/livestream/d14fcf59cb7d07a26c48ebc8c6565f44/index.m3u8
+#EXTINF:-1 tvg-id="Вместе-РФ HD" tvg-name="Вместе-РФ HD" group-title="Rutube",Вместе-РФ HD
+https://bl.rutube.ru/livestream/f6a6d5c955180d0d0f80c66d0b6150d3/index.m3u8
+#EXTINF:-1 tvg-id="Царьград HD" tvg-name="Царьград HD" group-title="Rutube",Царьград HD
+https://bl.rutube.ru/livestream/91815da4edb167b5bd617bae490e57da/index.m3u8
+#EXTINF:-1 tvg-id="Союз HD" tvg-name="Союз HD" group-title="Rutube",Союз HD
+https://bl.rutube.ru/livestream/80b308e455f2aceb498e5dccd58ca050/index.m3u8
+#EXTINF:-1 tvg-id="Смайл ТВ HD" tvg-name="Смайл ТВ HD" group-title="Rutube",Смайл ТВ HD
+https://bl.rutube.ru/livestream/2f052691c75d72b3ed7f3c33ea956a41/index.m3u8
+#EXTINF:-1 tvg-id="Охотник и рыболов Int HD" tvg-name="Охотник и рыболов Int HD" group-title="Rutube",Охотник и рыболов Int HD
+https://bl.rutube.ru/livestream/1da5d92af8c55b16241f1eb12a27f00c/index.m3u8
+#EXTINF:-1 tvg-id="Загородный Int HD" tvg-name="Загородный Int HD" group-title="Rutube",Загородный Int HD
+https://bl.rutube.ru/livestream/406973c72e9d0449feef05ef7811ad01/index.m3u8
+#EXTINF:-1 tvg-id="ТНТ Music HD" tvg-name="ТНТ Music HD" group-title="Rutube",ТНТ Music HD
+https://bl.rutube.ru/livestream/5a294ae1ed12c44c7053301fb5fa9ba0/index.m3u8
+#EXTINF:-1 tvg-id="RU.TV HD" tvg-name="RU.TV HD" group-title="Rutube",RU.TV HD
+https://bl.rutube.ru/livestream/b1eb8e90d7e636677b3eb73b4fcbb717/index.m3u8
+#EXTINF:-1 tvg-id="VIVA Russia HD" tvg-name="VIVA Russia HD" group-title="Rutube",VIVA Russia HD
+https://bl.rutube.ru/livestream/f712ae5ff3db23ec09b3674133d44daa/index.m3u8
+#EXTINF:-1 tvg-id="Музыка Мода ТВ HD" tvg-name="Музыка Мода ТВ HD" group-title="Rutube",Музыка Мода ТВ HD
+https://bl.rutube.ru/livestream/965a025e4ebbaf0957415f80c6de8534/index.m3u8
+#EXTINF:-1 tvg-id="Кино и Жизнь HD" tvg-name="Кино и Жизнь HD" group-title="Rutube",Кино и Жизнь HD
+https://bl.rutube.ru/livestream/09e51eefa939595a4ac67182c6fb3e4e/index.m3u8
+#EXTINF:-1 tvg-id="Кинолаффка HD" tvg-name="Кинолаффка HD" group-title="Rutube",Кинолаффка HD
+https://bl.rutube.ru/livestream/3b7d1499da9396462bfd17282d758d30/index.m3u8
+#EXTINF:-1 tvg-id="Киножелезо HD" tvg-name="Киножелезо HD" group-title="Rutube",Киножелезо HD
+https://bl.rutube.ru/livestream/4965b7b928c4a143d708ab424be01d37/index.m3u8
+#EXTINF:-1 tvg-id="Плюс Минус 16 HD" tvg-name="Плюс Минус 16 HD" group-title="Rutube",Плюс Минус 16 HD
+https://bl.rutube.ru/livestream/99d4597cea881a27cf7dd6e65a74dade/index.m3u8
+
+# Статистика:
+# Всего каналов: 42
+# Успешно: 25
+# Не найдено: 17
+# Не удалось получить:
+# - ТНТ HD
+# - ТНТ-4 HD
+# - ТВ-3 HD
+# - Пятница! HD
+# - Матч! ТВ HD
+# - Муз-ТВ HD
+# - Ю-ТВ HD
+# - Мир HD
+# - Мир 24 HD
+# - 2х2 HD
+# - Moonbug Kids TV HD (eng)
+# - Mr.Bean Cartoon HD (eng)
+# - Kronehit TV HD
+# - World Fashion Channel HD
+# - Deluxe Dance HD
+# - NOW:Rock HD
+# - Comedy Hub HD
