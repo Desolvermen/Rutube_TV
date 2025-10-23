@@ -1,6 +1,7 @@
 import requests
 import os
 import base64
+import time
 from datetime import datetime
 
 # Укажите список URL API и названий каналов
@@ -49,38 +50,85 @@ api_data = [
     ("https://rutube.ru/api/play/options/99d4597cea881a27cf7dd6e65a74dade/", "Плюс Минус 16 HD")
 ]
 
+def get_stream_url_with_retry(api_url, channel_name, retries=3):
+    """Получает URL потока с повторными попытками"""
+    for attempt in range(retries):
+        try:
+            print(f"Попытка {attempt + 1} для {channel_name}")
+            
+            # Добавляем заголовки чтобы избежать блокировки
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Accept': 'application/json',
+                'Referer': 'https://rutube.ru/'
+            }
+            
+            response = requests.get(api_url, timeout=15, headers=headers)
+            
+            if response.status_code == 403:
+                print(f"  Доступ запрещен для {channel_name}")
+                return None
+            elif response.status_code == 404:
+                print(f"  Канал не найден: {channel_name}")
+                return None
+                
+            response.raise_for_status()
+            data = response.json()
+            
+            # Пробуем разные пути к потоку
+            hls_streams = data.get('live_streams', {}).get('hls', [])
+            if hls_streams:
+                for stream in hls_streams:
+                    stream_url = stream.get('url')
+                    if stream_url and 'm3u8' in stream_url:
+                        print(f"  ✓ Найден поток для {channel_name}")
+                        return stream_url
+            
+            # Альтернативный путь
+            video_meta = data.get('video_meta', {})
+            if video_meta:
+                stream_url = video_meta.get('url')
+                if stream_url and 'm3u8' in stream_url:
+                    print(f"  ✓ Найден поток через video_meta для {channel_name}")
+                    return stream_url
+            
+            print(f"  ✗ Поток не найден в ответе для {channel_name}")
+            return None
+            
+        except requests.exceptions.Timeout:
+            print(f"  ⏰ Таймаут для {channel_name} (попытка {attempt + 1})")
+            if attempt < retries - 1:
+                time.sleep(2)  # Ждем перед повторной попыткой
+        except requests.exceptions.RequestException as e:
+            print(f"  ❌ Ошибка запроса для {channel_name}: {e}")
+            if attempt < retries - 1:
+                time.sleep(2)
+        except Exception as e:
+            print(f"  ❌ Неожиданная ошибка для {channel_name}: {e}")
+            if attempt < retries - 1:
+                time.sleep(2)
+    
+    return None
+
 def create_playlist():
     """Создает плейлист и возвращает его содержимое"""
     try:
         playlist_content = ["#EXTM3U"]
         playlist_content.append(f"# Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        playlist_content.append("# Playlist automatically generated from Rutube")
         
         successful_channels = 0
         failed_channels = []
 
         # Обработка каждого URL API
         for api_url, channel_name in api_data:
-            try:
-                response = requests.get(api_url, timeout=10)
-                response.raise_for_status()
-                data = response.json()
-                hls_streams = data.get('live_streams', {}).get('hls', [])
-
-                if hls_streams:
-                    for stream in hls_streams:
-                        stream_url = stream.get('url')
-                        if stream_url:
-                            playlist_content.append(f"#EXTINF:-1,{channel_name}")
-                            playlist_content.append(f"{stream_url}")
-                            successful_channels += 1
-                            break  # Берем первый доступный поток
-                    else:
-                        failed_channels.append(channel_name)
-                else:
-                    failed_channels.append(channel_name)
-                    
-            except requests.RequestException as e:
-                print(f"Ошибка с {channel_name}: {e}")
+            stream_url = get_stream_url_with_retry(api_url, channel_name)
+            
+            if stream_url:
+                playlist_content.append(f"#EXTINF:-1 tvg-id=\"{channel_name}\",{channel_name}")
+                playlist_content.append(f"{stream_url}")
+                successful_channels += 1
+            else:
                 failed_channels.append(channel_name)
 
         # Добавляем информацию о статусе
